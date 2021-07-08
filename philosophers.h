@@ -28,5 +28,7 @@ typedef struct s_cond
 }               t_cond;
 
 int	    ft_atoi(const char *str);
+void	print_parse_data(t_cond *data);
+
 
 #endif

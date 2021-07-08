@@ -1,3 +1,25 @@
+#include "philosophers.h"
+
+void	print_parse_data(t_cond *data)
+{
+	int	i;
+
+	i = 0;
+	printf("Total_philo [%d]\n", data->total_philo);
+    printf("Time to die [%d]\n", data->time_die);
+    printf("Time to eat [%d]\n", data->time_eat);
+    printf("Time to sleep[%d]\n", data->time_sleep);
+    printf("Total number of required meals[%d]\n",
+    data->total_time_eat);
+    while (i < data->total_philo)
+    {
+        printf("philosopher number [%d]\n", data->philo[i].id);
+        printf("philo total_meals [%d]\n", data->philo[i].total_meals);
+        printf("philo Last Meal [%lu]\n", data->philo[i].last_meal);
+        i++;
+    }
+}
+
 int	ft_isspace_isdigit(char c, char d)
 {
 	if (d == 's')
