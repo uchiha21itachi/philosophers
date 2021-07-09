@@ -16,19 +16,29 @@ typedef struct s_philo
     pthread_mutex_t fork;
 }               t_philo;
 
-typedef struct s_cond
+typedef struct s_data
 {
-    int     total_philo;
-    int     time_die;
-    int     time_eat;
-    int     time_sleep;
-    int     total_time_eat;
+    int             total_philo;
+    int             time_die;
+    int             time_eat;
+    int             time_sleep;
+    int             total_time_eat;
+    pthread_mutex_t print;
+    pthread_mutex_t death;
     t_philo *philo;
+}               t_data;
 
-}               t_cond;
+typedef struct s_parse
+{
+    int     id;
+    t_data  *tab;
+}           t_parse;
 
-int	    ft_atoi(const char *str);
-void	print_parse_data(t_cond *data);
-
+int	            ft_atoi(const char *str);
+void	        print_parse_data(t_data *data);
+unsigned long   get_time(void);
+void	        print_parsed_philo(t_parse *parse);
+void           *function(void *data);
+void	        free_all(t_data *data, t_parse **parse);
 
 #endif

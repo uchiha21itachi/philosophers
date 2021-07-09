@@ -1,4 +1,5 @@
 SRCS	= philosophers.c \
+		thread_func.c \
 		utils.c \
 
 
