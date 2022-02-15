@@ -1,40 +1,5 @@
 #include "philosophers.h"
 
-void	print_parse_data(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	printf("Total_philo [%d]\n", data->total_philo);
-    printf("Time to die [%d]\n", data->time_die);
-    printf("Time to eat [%d]\n", data->time_eat);
-    printf("Time to sleep[%d]\n", data->time_sleep);
-    printf("Total number of required meals[%d]\n",
-    data->total_time_eat);
-    while (i < data->total_philo)
-    {
-        printf("philosopher number [%d]\n", data->philo[i].id);
-        printf("philo total_meals [%d]\n", data->philo[i].total_meals);
-        printf("philo Last Meal [%lu]\n", data->philo[i].last_meal);
-        i++;
-    }
-}
-
-void	print_parsed_philo(t_parse *parse)
-{
-	// int i;
-
-	// i = 0;
-	// while (i < data->total_philo)
-	// {
-		printf("parse-> id [%d] \n", parse->id);
-		printf("philo last meal [%lu]\n total meals [%d]\n",
-		parse->tab->philo[parse->id].last_meal,
-		parse->tab->philo[parse->id].total_meals);
-		// i++;
-	// }
-}
-
 int	ft_isspace_isdigit(char c, char d)
 {
 	if (d == 's')
@@ -96,14 +61,21 @@ unsigned long get_time(void)
     return (temp);
 }
 
-void	free_all(t_data *data, t_parse **parse)
+void	free_all (t_parse *parse)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while (++i < data->total_philo)
-		free(parse[i]);
-	free(parse);
-	free(data->philo);
-	free(data);
+	while (++i < parse->data->total_philo)
+	{
+        pthread_mutex_destroy(&parse->philo[i].l_fork);
+        pthread_mutex_destroy(&parse->philo[i].pstate_m);
+	}
+    pthread_mutex_destroy(&parse->data->print);
+    pthread_mutex_destroy(&parse->data->death);
+    pthread_mutex_destroy(&parse->data->finish);
+    pthread_mutex_destroy(&parse->data->pick);
+    pthread_mutex_destroy(&parse->data->state_m);
+	free(parse->data);
+	free(parse->philo);
 }

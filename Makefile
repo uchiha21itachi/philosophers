@@ -1,21 +1,23 @@
-SRCS	= philosophers.c \
-		thread_func.c \
+SRCS	= main.c \
 		utils.c \
+		thread_func.c \
+		philosophers.c \
 
 
 OBJS			= $(SRCS:.c=.o)
 
-CC				= gcc
+CC				= gcc #-g -fsanitize=thread
 RM				= rm -f
-CFLAGS			= -Wall -Wextra -Werror -I.
+CFLAGS			= -Wall -Wextra -Werror -I.  
 LIBS			= -lpthread
 
-NAME			= philo_one
+NAME			= philo
 
 all:			$(NAME)
 
 $(NAME):		$(OBJS)
-				gcc ${CFLAGS} -o ${NAME} ${OBJS} ${LIBS}
+				gcc ${CFLAGS} -o ${NAME} ${OBJS} ${LIBS} 
+
 
 clean:
 				$(RM) $(OBJS) $(BONUS_OBJS)
