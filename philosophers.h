@@ -30,12 +30,12 @@ typedef struct s_data
 	int				nb_clean_exit;
 	int				death_clean_exit;
 	int				state;
+	int				error;
 	pthread_mutex_t	print;
 	pthread_mutex_t	death;
 	pthread_mutex_t	state_m;
 	pthread_mutex_t	finish;
 	pthread_mutex_t	clean_exit;
-	pthread_mutex_t	mdeath_clean_exit;
 }		t_data;
 
 typedef struct s_philo
@@ -70,11 +70,12 @@ int				philo_init(t_parse *parse);
 /* utils.c */
 int				is_all_num(char *str);
 int				ft_atoi(const char *str);
+void			free_data_mutex(t_parse *parse);
+void			free_all(t_parse *parse);
 
 /* main.c */
 int				check_args(int ac, char **av);
 unsigned long	get_time(void);
-void			free_all(t_parse *parse);
 
 /* Thread_func.c */
 void			*function(void *parse);

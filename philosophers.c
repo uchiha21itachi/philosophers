@@ -12,11 +12,10 @@
 
 #include "philosophers.h"
 
-//total meal 0 check this please
 int	check_meal(t_philo *p)
 {
 	pthread_mutex_lock(&p->count_meal);
-	if (p->data->total_time_eat <= 0)
+	if (p->data->total_time_eat < 0)
 	{
 		pthread_mutex_unlock(&p->count_meal);
 		return (0);

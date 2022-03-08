@@ -6,7 +6,7 @@
 /*   By: yassharm <yassharm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 21:41:55 by yassharm          #+#    #+#             */
-/*   Updated: 2022/03/08 21:47:25 by yassharm         ###   ########.fr       */
+/*   Updated: 2022/03/09 00:13:35 by yassharm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	create_philo_threads(t_parse *p, int r)
 		if (i % 2 == r)
 		{
 			p->philo[i].data = p->data;
-			pthread_create(&p->philo[i].thread_id, NULL, function, (void *)&p->philo[i]);
+			pthread_create(&p->philo[i].thread_id, NULL,
+				function, (void *)&p->philo[i]);
 			usleep(50);
 		}
 		i++;
@@ -84,20 +85,20 @@ int	main(int ac, char **av)
 		return (-1);
 	}
 	parse.data = data_init(ac, av);
-	if (parse.data == NULL)
-		return (-1);
-	parse.philo = (t_philo *)malloc(sizeof(t_philo) * parse.data->total_philo);
-	if (parse.philo == NULL)
+	if (parse.data->error == 1 || init_data_mutex(parse.data) != 0)
 	{
-		printf("Malloc Error \n");
+		free(parse.data);
 		return (-1);
 	}
 	if (philo_init(&parse) == -1)
 	{
 		printf("Error in initializing philosophers\n");
+		if (parse.philo)
+			free(parse.philo);
 		return (-1);
 	}
 	create_threads(&parse);
 	free_all(&parse);
+	free_data_mutex(&parse);
 	return (0);
 }

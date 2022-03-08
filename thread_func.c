@@ -12,9 +12,16 @@
 
 #include "philosophers.h"
 
+void	increase_death_clean_exit(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->clean_exit);
+	philo->data->death_clean_exit++;
+	pthread_mutex_unlock(&philo->data->clean_exit);
+}
+
 void	*check_death(void *p)
 {
-	t_philo		*philo;
+	t_philo			*philo;
 	unsigned long	temp;
 
 	philo = (t_philo *)p;
@@ -31,16 +38,12 @@ void	*check_death(void *p)
 			print_with_mutex("Is dead", philo);
 			check_state_status(philo, 1);
 			pthread_mutex_unlock(&philo->data->death);
-			pthread_mutex_lock(&philo->data->clean_exit);
-			philo->data->death_clean_exit++;
-			pthread_mutex_unlock(&philo->data->clean_exit);
+			increase_death_clean_exit(philo);
 			return (0);
 		}
 		pthread_mutex_unlock(&philo->data->death);
 	}
-	pthread_mutex_lock(&philo->data->clean_exit);
-	philo->data->death_clean_exit++;
-	pthread_mutex_unlock(&philo->data->clean_exit);
+	increase_death_clean_exit(philo);
 	return (0);
 }
 
@@ -65,7 +68,6 @@ void	*function(void *p)
 	}
 	if (philo->pstate == 0)
 		drop_fork(p);
-	// pthread_detach(philo->thread_death_id);
 	pthread_mutex_lock(&philo->data->clean_exit);
 	philo->data->nb_clean_exit++;
 	pthread_mutex_unlock(&philo->data->clean_exit);
@@ -84,9 +86,6 @@ void	*wait_philo(void *p)
 		usleep(100);
 	}
 	i = -1;
-	// pthread_mutex_lock(&parse->data->print);
-	// printf("total number of all_out %d", parse->data->nb_clean_exit);
-	// pthread_mutex_unlock(&parse->data->print);
 	while (++i < parse->data->total_philo)
 		pthread_join(parse->philo[i].thread_id, &ret);
 	usleep(100);
@@ -105,10 +104,6 @@ void	*wait_death(void *p)
 		usleep(100);
 	}
 	i = -1;
-	// pthread_mutex_lock(&parse->data->print);
-	// printf("total number of all_out_deaths %d\n\n",
-	// parse->data->death_clean_exit);
-	// pthread_mutex_unlock(&parse->data->print);
 	while (++i < parse->data->total_philo)
 		pthread_join(parse->philo[i].thread_death_id, &ret);
 	usleep(100);

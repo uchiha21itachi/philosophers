@@ -4,13 +4,14 @@ SRCS	= main.c \
 		thread_func.c \
 		activities.c \
 		philosophers.c \
+		check.c \
 
 # -fsanitize=thread 
 OBJS			= $(SRCS:.c=.o)
 
 CC				= gcc 
 RM				= rm -f
-CFLAGS			= -Wall -Wextra -Werror -fsanitize=thread  -I.
+CFLAGS			= -Wall -Wextra -Werror  -fsanitize=thread  -I.
 LIBS			= -lpthread
 
 NAME			= philo

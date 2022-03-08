@@ -76,6 +76,21 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
+void	free_data_mutex(t_parse *parse)
+{
+	if (pthread_mutex_destroy(&parse->data->print) != 0)
+		printf("error in mutex print\n");
+	if (pthread_mutex_destroy(&parse->data->death) != 0)
+		printf("error in mutex death\n");
+	if (pthread_mutex_destroy(&parse->data->finish) != 0)
+		printf("error in mutex finish\n");
+	if (pthread_mutex_destroy(&parse->data->clean_exit) != 0)
+		printf("error in mutex clean_exit\n");
+	if (pthread_mutex_destroy(&parse->data->state_m) != 0)
+		printf("error in mutex state_m\n");
+	free(parse->data);
+}
+
 void	free_all(t_parse *parse)
 {
 	int		i;
@@ -92,18 +107,5 @@ void	free_all(t_parse *parse)
 		if (pthread_mutex_destroy(&parse->philo[i].count_meal) != 0)
 			printf("error in mutex count_meals");
 	}
-	if (pthread_mutex_destroy(&parse->data->print) != 0)
-		printf("error in mutex print\n");
-	if (pthread_mutex_destroy(&parse->data->death) != 0)
-		printf("error in mutex death\n");
-	if (pthread_mutex_destroy(&parse->data->finish) != 0)
-		printf("error in mutex finish\n");
-	if (pthread_mutex_destroy(&parse->data->clean_exit) != 0)
-		printf("error in mutex clean_exit\n");
-	if (pthread_mutex_destroy(&parse->data->mdeath_clean_exit) != 0)
-		printf("error in mutex mdeath clean_exit\n");
-	if (pthread_mutex_destroy(&parse->data->state_m) != 0)
-		printf("error in mutex state_m\n");
-	free(parse->data);
 	free(parse->philo);
 }
