@@ -1,17 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yassharm <yassharm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/08 22:03:55 by yassharm          #+#    #+#             */
+/*   Updated: 2022/03/08 22:13:58 by yassharm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 
-int     is_all_num(char *str)
+int	is_all_num(char *str)
 {
-    int     i;
+	int	i;
 
-    i  = 0;
-    while(str[i])
-    {
-        if (str[i] < 48 || str[i] > 57)
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] < 48 || str[i] > 57)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 int	ft_isspace_isdigit(char c, char d)
@@ -36,7 +48,6 @@ int	ft_isspace_isdigit(char c, char d)
 	}
 	return (0);
 }
-
 
 int	ft_atoi(const char *str)
 {
@@ -65,30 +76,29 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
-
-void	free_all (t_parse *parse)
+void	free_all(t_parse *parse)
 {
 	int		i;
 
 	i = -1;
 	while (++i < parse->data->total_philo)
 	{
-        if (pthread_mutex_destroy(&parse->philo[i].l_fork) != 0)
+		if (pthread_mutex_destroy(&parse->philo[i].l_fork) != 0)
 			printf("error in mutex l_fork");
-        if (pthread_mutex_destroy(&parse->philo[i].pstate_m) != 0)
+		if (pthread_mutex_destroy(&parse->philo[i].pstate_m) != 0)
 			printf("error in mutex pstate_m");
-        if (pthread_mutex_destroy(&parse->philo[i].eating) != 0)
+		if (pthread_mutex_destroy(&parse->philo[i].eating) != 0)
 			printf("error in mutex eating");
-        if (pthread_mutex_destroy(&parse->philo[i].count_meal) != 0)
+		if (pthread_mutex_destroy(&parse->philo[i].count_meal) != 0)
 			printf("error in mutex count_meals");
 	}
-    if (pthread_mutex_destroy(&parse->data->print) != 0)
+	if (pthread_mutex_destroy(&parse->data->print) != 0)
 		printf("error in mutex print\n");
 	if (pthread_mutex_destroy(&parse->data->death) != 0)
 		printf("error in mutex death\n");
-    if (pthread_mutex_destroy(&parse->data->finish) != 0)
+	if (pthread_mutex_destroy(&parse->data->finish) != 0)
 		printf("error in mutex finish\n");
-    if (pthread_mutex_destroy(&parse->data->clean_exit) != 0)
+	if (pthread_mutex_destroy(&parse->data->clean_exit) != 0)
 		printf("error in mutex clean_exit\n");
 	if (pthread_mutex_destroy(&parse->data->mdeath_clean_exit) != 0)
 		printf("error in mutex mdeath clean_exit\n");
