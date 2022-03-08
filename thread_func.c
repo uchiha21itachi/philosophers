@@ -9,8 +9,7 @@ void    *check_death(void *p)
 
     while(check_state_status(philo,0) == 0 && !check_meal(p))
     {
-        // usleep(1000 * (philo->data->time_die));
-        usleep(1000 * (100));
+        usleep(100);// * (philo->data->time_die));
         pthread_mutex_lock(&philo->data->death);
         if (philo->last_meal == 0)
             temp = philo->data->start_time;
@@ -21,10 +20,22 @@ void    *check_death(void *p)
             print_with_mutex("Is dead", philo);
             check_state_status(philo, 1);
             pthread_mutex_unlock(&philo->data->death);
+            pthread_mutex_lock(&philo->data->clean_exit);
+            philo->data->death_clean_exit++;
+            pthread_mutex_unlock(&philo->data->clean_exit);
+            // pthread_mutex_lock(&philo->data->print);
+            // printf("total number of all_out %d", philo->data->death_clean_exit);
+            // pthread_mutex_unlock(&philo->data->print);
             return (0);
         }
         pthread_mutex_unlock(&philo->data->death);
     }
+    pthread_mutex_lock(&philo->data->clean_exit);
+    philo->data->death_clean_exit++;
+    pthread_mutex_unlock(&philo->data->clean_exit);
+    // pthread_mutex_lock(&philo->data->print);
+    // printf("total number of all_out %d", philo->data->death_clean_exit);
+    // pthread_mutex_unlock(&philo->data->print);
     return (0);
 }
 
@@ -49,14 +60,14 @@ void    *function(void *p)
     }
     if (philo->pstate == 0)
         drop_fork(p);
-    pthread_detach(philo->thread_death_id);
+    // pthread_detach(philo->thread_death_id);
     pthread_mutex_lock(&philo->data->clean_exit);
     philo->data->nb_clean_exit++;
     pthread_mutex_unlock(&philo->data->clean_exit);
     return(0);
 }
 
-void    *wait_death(void *p)
+void    *wait_philo(void *p)
 {
     t_parse  *parse;
     int     i;
@@ -77,7 +88,26 @@ void    *wait_death(void *p)
     return (0);
 }
 
+void    *wait_death(void *p)
+{
+    t_parse  *parse;
+    int     i;
+    void     *ret;
 
+    parse = (t_parse *)p;
+    while(!check_all_death_out(parse->data))
+    {
+        usleep(100);
+    }
+    i = -1;
+    pthread_mutex_lock(&parse->data->print);
+    printf("total number of all_out_deaths %d\n\n", parse->data->death_clean_exit);
+    pthread_mutex_unlock(&parse->data->print);
+    while(++i < parse->data->total_philo)
+        pthread_join(parse->philo[i].thread_death_id, &ret);
+    usleep(100);
+    return(0);
+}   
 
 
 

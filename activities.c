@@ -25,12 +25,11 @@ void    pick_fork(t_philo *p)
 
 void    eating(t_philo *philo)
 {
-    pthread_mutex_lock(&philo->eating);
+    pthread_mutex_lock(&philo->data->death);
     philo->last_meal = get_time();
     print_with_mutex("Is eating", philo);
-    pthread_mutex_unlock(&philo->eating);
-    // usleep(1000 * philo->data->time_eat);
-    usleep(1000 * 100);
+    pthread_mutex_unlock(&philo->data->death);
+    usleep(1000 * philo->data->time_eat);
     drop_fork(philo);
     set_pstate(philo, 1);
     pthread_mutex_lock(&philo->count_meal);

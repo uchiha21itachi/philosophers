@@ -16,12 +16,14 @@ typedef struct s_data
     int             time_sleep;
     int             total_time_eat;
     int             nb_clean_exit;
+    int             death_clean_exit;
     int             state;
     pthread_mutex_t print;
     pthread_mutex_t death;
     pthread_mutex_t state_m;
     pthread_mutex_t finish;
     pthread_mutex_t clean_exit;
+    pthread_mutex_t mdeath_clean_exit;
 }               t_data;
 
 typedef struct s_philo
@@ -30,9 +32,6 @@ typedef struct s_philo
     int             total_meals;
     int             pstate;
     unsigned long   last_meal;
-    int             time_to_die;
-    int             time_to_eat;
-    int             time_to_sleep;
     t_data          *data;
     
     pthread_t       thread_id;
@@ -69,22 +68,32 @@ int             check_args(int ac, char **av);
 unsigned long   get_time(void);
 void	        free_all (t_parse *parse);
 
-
-int check_all_out(t_data *data);
-void    *wait_death(void *p);
-
-void            print_with_mutex(char *str, t_philo *p);
-void            pick_fork(t_philo *p);
-void            drop_fork(t_philo *p);
+/* Thread_func.c */
+void            *function(void *parse);
+void            *wait_philo(void *p);
 void            *check_death(void *p);
-int             check_meal(t_philo *p);
+void            *wait_death(void *p);
+
+
+/*Activities.c */
+void            sleeping(t_philo *p);
+void            drop_fork(t_philo *p);
 void            eating(t_philo *philo);
-void           *function(void *parse);
-void            set_pstate(t_philo *philo, int i);
+void            pick_fork(t_philo *p);
+void            print_with_mutex(char *str, t_philo *p);
+
+
+/*philosopher.c.c */
+int             check_all_out(t_data *data);
 int             check_state_status(t_philo *p, int i);
+void            set_pstate(t_philo *philo, int i);
+int             check_meal(t_philo *p); 
+int             check_all_death_out(t_data *data);
+
+
+
 void            do_things(t_philo *philo);
 void	        print_parse_data(t_parse *parse);
-void            sleeping(t_philo *p);
 void	        print_parsed_philo(t_parse *parse);
 
 

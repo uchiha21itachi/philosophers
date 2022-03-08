@@ -83,15 +83,17 @@ void	free_all (t_parse *parse)
 			printf("error in mutex count_meals");
 	}
     if (pthread_mutex_destroy(&parse->data->print) != 0)
-		printf("error in mutex print");
+		printf("error in mutex print\n");
 	if (pthread_mutex_destroy(&parse->data->death) != 0)
-		printf("error in mutex death");
+		printf("error in mutex death\n");
     if (pthread_mutex_destroy(&parse->data->finish) != 0)
-		printf("error in mutex finish");
+		printf("error in mutex finish\n");
     if (pthread_mutex_destroy(&parse->data->clean_exit) != 0)
-		printf("error in mutex clean_exit");
-    if (pthread_mutex_destroy(&parse->data->state_m) != 0)
-		printf("error in mutex state_m");
+		printf("error in mutex clean_exit\n");
+	if (pthread_mutex_destroy(&parse->data->mdeath_clean_exit) != 0)
+		printf("error in mutex mdeath clean_exit\n");
+	if (pthread_mutex_destroy(&parse->data->state_m) != 0)
+		printf("error in mutex state_m\n");
 	free(parse->data);
 	free(parse->philo);
 }

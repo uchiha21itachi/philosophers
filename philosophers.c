@@ -3,18 +3,18 @@
 //total meal 0 check this please
 int     check_meal(t_philo *p)
 {
-    pthread_mutex_lock(&p->data->finish);
+    pthread_mutex_lock(&p->count_meal);
     if (p->data->total_time_eat <= 0)
     {
-        pthread_mutex_unlock(&p->data->finish);
+        pthread_mutex_unlock(&p->count_meal);
         return 0;
     }
     if (p->total_meals >= p->data->total_time_eat)
     {
-        pthread_mutex_unlock(&p->data->finish);
+        pthread_mutex_unlock(&p->count_meal);
         return (1);
     }
-    pthread_mutex_unlock(&p->data->finish);
+    pthread_mutex_unlock(&p->count_meal);
     return (0);
 }
 
@@ -43,6 +43,19 @@ int check_all_out(t_data *data)
 {
     pthread_mutex_lock(&data->clean_exit);
     if (data->nb_clean_exit >= data->total_philo)
+    {
+        pthread_mutex_unlock(&data->clean_exit);
+        return (1);
+    }
+    pthread_mutex_unlock(&data->clean_exit);
+    return (0);
+}
+
+
+int check_all_death_out(t_data *data)
+{
+    pthread_mutex_lock(&data->clean_exit);
+    if (data->death_clean_exit >= data->total_philo)
     {
         pthread_mutex_unlock(&data->clean_exit);
         return (1);

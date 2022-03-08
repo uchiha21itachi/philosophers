@@ -50,18 +50,21 @@ void    create_philo_threads(t_parse *parse, int r)
 void    create_threads(t_parse *parse)
 
 {
-    // int             i;
-    // void            *ret;
+    pthread_t       gather_philo;
     pthread_t       gather_death;
+    // int              i;
+    // void            *ret;
 
     parse->data->start_time = get_time();
     create_philo_threads(parse, 0);    
     create_philo_threads(parse, 1);
+    pthread_create(&gather_philo, NULL, wait_philo, (void *)parse);
+    pthread_create(&gather_death, NULL, wait_death, (void *)parse);
+    pthread_join(gather_philo, NULL);
+    pthread_join(gather_death, NULL);
     // i = -1;
     // while (++i < parse->data->total_philo)
-    //     pthread_join(parse->philo[i].thread_id, &ret);
-    pthread_create(&gather_death, NULL, wait_death, (void *)parse);
-    pthread_join(gather_death, NULL);
+        // pthread_join(parse->philo[i].thread_id, &ret);
 }
 
 int     main(int ac, char **av)
@@ -88,7 +91,6 @@ int     main(int ac, char **av)
         return (-1);
     }
     create_threads(&parse);
-    usleep(100);
     free_all(&parse);
     return (0);
 }
