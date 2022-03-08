@@ -1,14 +1,16 @@
 SRCS	= main.c \
 		utils.c \
+		parsing.c \
 		thread_func.c \
+		activities.c \
 		philosophers.c \
 
-
+# -fsanitize=thread 
 OBJS			= $(SRCS:.c=.o)
 
-CC				= gcc #-g -fsanitize=thread
+CC				= gcc 
 RM				= rm -f
-CFLAGS			= -Wall -Wextra -Werror -I.  
+CFLAGS			= -Wall -Wextra -Werror  -I.
 LIBS			= -lpthread
 
 NAME			= philo
@@ -16,7 +18,7 @@ NAME			= philo
 all:			$(NAME)
 
 $(NAME):		$(OBJS)
-				gcc ${CFLAGS} -o ${NAME} ${OBJS} ${LIBS} 
+				gcc ${CFLAGS}  -o ${NAME} ${OBJS}   ${LIBS}
 
 
 clean:

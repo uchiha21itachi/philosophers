@@ -1,5 +1,19 @@
 #include "philosophers.h"
 
+int     is_all_num(char *str)
+{
+    int     i;
+
+    i  = 0;
+    while(str[i])
+    {
+        if (str[i] < 48 || str[i] > 57)
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
 int	ft_isspace_isdigit(char c, char d)
 {
 	if (d == 's')
@@ -51,31 +65,33 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
-unsigned long get_time(void)
-{
-    struct timeval  tp;
-    unsigned long   temp;
-
-    gettimeofday(&tp, NULL);
-    temp = (tp.tv_sec * 1000) + (tp.tv_usec / 1000);
-    return (temp);
-}
 
 void	free_all (t_parse *parse)
 {
-	int	i;
+	int		i;
 
 	i = -1;
 	while (++i < parse->data->total_philo)
 	{
-        pthread_mutex_destroy(&parse->philo[i].l_fork);
-        pthread_mutex_destroy(&parse->philo[i].pstate_m);
+        if (pthread_mutex_destroy(&parse->philo[i].l_fork) != 0)
+			printf("error in mutex l_fork");
+        if (pthread_mutex_destroy(&parse->philo[i].pstate_m) != 0)
+			printf("error in mutex pstate_m");
+        if (pthread_mutex_destroy(&parse->philo[i].eating) != 0)
+			printf("error in mutex eating");
+        if (pthread_mutex_destroy(&parse->philo[i].count_meal) != 0)
+			printf("error in mutex count_meals");
 	}
-    pthread_mutex_destroy(&parse->data->print);
-    pthread_mutex_destroy(&parse->data->death);
-    pthread_mutex_destroy(&parse->data->finish);
-    pthread_mutex_destroy(&parse->data->pick);
-    pthread_mutex_destroy(&parse->data->state_m);
+    if (pthread_mutex_destroy(&parse->data->print) != 0)
+		printf("error in mutex print");
+	if (pthread_mutex_destroy(&parse->data->death) != 0)
+		printf("error in mutex death");
+    if (pthread_mutex_destroy(&parse->data->finish) != 0)
+		printf("error in mutex finish");
+    if (pthread_mutex_destroy(&parse->data->clean_exit) != 0)
+		printf("error in mutex clean_exit");
+    if (pthread_mutex_destroy(&parse->data->state_m) != 0)
+		printf("error in mutex state_m");
 	free(parse->data);
 	free(parse->philo);
 }
